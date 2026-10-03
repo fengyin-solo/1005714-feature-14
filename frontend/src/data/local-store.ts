@@ -2,7 +2,10 @@ import { SEED_ROWS } from './seed'
 import type { EntryRow } from './types'
 
 // 本地持久化：数据放在 localStorage 里，刷新、关掉再打开都还在。
+// 版本随种子结构一起抬升：结构变了就回到最新种子，不沿用旧格式。
 const STORAGE_KEY = 'substation-protection:entries'
+const STORAGE_VERSION = 2
+const VERSION_KEY = 'substation-protection:version'
 
 function clone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T
@@ -13,9 +16,11 @@ function readStorage(): Record<string, EntryRow[]> {
   if (typeof window === 'undefined' || !window.localStorage) {
     return fallback
   }
+  const version = window.localStorage.getItem(VERSION_KEY)
   const raw = window.localStorage.getItem(STORAGE_KEY)
-  if (!raw) {
+  if (!raw || version !== String(STORAGE_VERSION)) {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(fallback))
+    window.localStorage.setItem(VERSION_KEY, String(STORAGE_VERSION))
     return fallback
   }
   try {
