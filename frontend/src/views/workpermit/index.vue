@@ -82,7 +82,7 @@ import {
 import type { EntryRow } from '@/data/types'
 
 const meta = moduleMeta('workpermit')
-const columns = ["工作票号", "工作任务", "所属变电站", "停电范围", "工作负责人", "许可时间", "终结时间", "许可状态"]
+const columns = ["工作票号", "工作任务", "所属变电站", "停电范围", "工作负责人", "来源检修编号", "许可时间", "终结时间", "许可状态"]
 const actions = ["签发许可", "办理终结", "作废工作票"]
 const statuses = ["待签发", "已许可", "已终结", "已作废"]
 const stats = [{"label": "待签发工作票", "value": 0}, {"label": "已许可工作票", "value": 0}, {"label": "已终结工作票", "value": 0}]

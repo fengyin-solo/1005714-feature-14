@@ -1,5 +1,11 @@
 import { MODULE_BY_KEY } from '@/data/modules'
 import { allRows, listRows, resetRows, saveRows } from '@/data/local-store'
+import {
+  ensureCompletionPermit,
+  syncLedgerStatus,
+  syncSheetStatus,
+  today,
+} from './schedule-service'
 import type { ActionResult, EntryRow, ModuleMeta, OverviewResult, PageResult } from '@/data/types'
 
 // 会写进数据的「往回走」动作：命中就把这条记录标成异常态，看板上能一眼看出来。
@@ -28,6 +34,15 @@ export function listEntries(key: string, filters: Record<string, string> = {}): 
   return { items: matched, total: matched.length, page: 1, size: matched.length }
 }
 
+// 越级的动作挡回：模块登记了源状态就只允许从指定状态发起，回退、跳级都不给过。
+export function canStartAction(meta: ModuleMeta, action: string, current: string): boolean {
+  const sources = meta.actionSources?.[action]
+  if (!sources) {
+    return true
+  }
+  return sources.includes(current)
+}
+
 export function runAction(key: string, id: number, action: string): ActionResult {
   const meta = moduleMeta(key)
   const target = meta.actionTargets[action]
@@ -43,16 +58,43 @@ export function runAction(key: string, id: number, action: string): ActionResult
   if (current === target) {
     return { ok: false, message: `${meta.entity}已经是「${target}」，不用重复操作` }
   }
-  const lastStatus = meta.statuses[meta.statuses.length - 1]
+  if (!canStartAction(meta, action, current)) {
+    return { ok: false, message: `当前状态「${current}」不能直接「${action}」，越级流转已挡回，请按 ${meta.statuses.join(' → ')} 顺序推进` }
+  }
+  const isTerminal = key === 'transformermaint' || key === 'schedulesheet'
+    ? target === '已完工' || target === '已延期'
+    : target === meta.statuses[meta.statuses.length - 1]
   const updated: EntryRow = {
     ...rows[index],
     status: target,
-    pending: target !== lastStatus,
+    pending: !isTerminal,
     abnormal: NEGATIVE_ACTIONS.some((verb) => action.startsWith(verb)),
   }
   const next = [...rows]
   next[index] = updated
   saveRows(key, next)
+
+  // 主变台账与排期单两处读到的状态、工期要同向：一侧推进，另一侧同步。
+  if (key === 'transformermaint') {
+    syncSheetStatus(updated, target)
+    if (target === '已完工') {
+      updated['完成日期'] = updated['完成日期'] || today()
+      next[index] = updated
+      saveRows(key, next)
+      ensureCompletionPermit(updated)
+    }
+  } else if (key === 'schedulesheet') {
+    syncLedgerStatus(updated, target)
+    if (target === '已完工') {
+      const ledger = listRows('transformermaint').find(
+        (row) => String(row['检修编号'] ?? '') === String(updated['检修编号'] ?? ''),
+      )
+      if (ledger) {
+        ensureCompletionPermit(ledger)
+      }
+    }
+  }
+
   return { ok: true, message: `${meta.entity}已${action}，当前状态「${target}」` }
 }
 

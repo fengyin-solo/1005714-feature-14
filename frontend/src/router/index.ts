@@ -10,6 +10,7 @@ const Relaytest = () => import('@/views/relaytest/index.vue')
 const Faultrecord = () => import('@/views/faultrecord/index.vue')
 const Tripstat = () => import('@/views/tripstat/index.vue')
 const Transformermaint = () => import('@/views/transformermaint/index.vue')
+const Schedulesheet = () => import('@/views/schedulesheet/index.vue')
 const Breaker = () => import('@/views/breaker/index.vue')
 const Dcsystem = () => import('@/views/dcsystem/index.vue')
 const Insulationtest = () => import('@/views/insulationtest/index.vue')
@@ -33,6 +34,7 @@ const router = createRouter({
     { path: '/faultrecord', name: 'faultrecord', component: Faultrecord },
     { path: '/tripstat', name: 'tripstat', component: Tripstat },
     { path: '/transformermaint', name: 'transformermaint', component: Transformermaint },
+    { path: '/schedulesheet', name: 'schedulesheet', component: Schedulesheet },
     { path: '/breaker', name: 'breaker', component: Breaker },
     { path: '/dcsystem', name: 'dcsystem', component: Dcsystem },
     { path: '/insulationtest', name: 'insulationtest', component: Insulationtest },

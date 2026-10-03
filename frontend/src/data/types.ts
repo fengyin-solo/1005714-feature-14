@@ -17,6 +17,8 @@ export type ModuleMeta = {
   statuses: string[]
   actions: string[]
   actionTargets: Record<string, string>
+  // 动作允许的源状态：配置后只有这些状态能发起该动作，其余一律按越级挡回。
+  actionSources?: Record<string, string[]>
   metrics: string[]
 }
 

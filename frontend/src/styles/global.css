@@ -35,3 +35,48 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .error-text { color: #b42318; }
 .status-legend { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 10px; font-size: 12px; color: var(--muted); }
 .legend-item { background: #eef2f7; border-radius: 999px; padding: 2px 10px; }
+
+/* 批量排期与排期单 */
+.col-check { width: 40px; text-align: center; }
+.muted-check { color: #9aa6b2; font-size: 12px; }
+.bulk-pick { display: inline-flex; gap: 10px; align-items: center; }
+.ok-text { color: #067647; font-size: 13px; }
+.status-tag { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: 12px; background: #eef2f7; color: #475467; white-space: nowrap; }
+.status-tag.st-待开工 { background: #e0efff; color: #1849a9; }
+.status-tag.st-检修中 { background: #fef0c7; color: #b54708; }
+.status-tag.st-已完工 { background: #d1fadf; color: #05603a; }
+.status-tag.st-已延期 { background: #fee4e2; color: #b42318; }
+.tag { display: inline-block; border-radius: 4px; padding: 0 6px; font-size: 11px; margin-left: 6px; line-height: 18px; }
+.tag-approved { background: #fde9c8; color: #b54708; }
+.tag-batch { background: #d1fadf; color: #05603a; margin-left: 0; }
+.tag-solo { background: #fee4e2; color: #b42318; margin-left: 0; }
+
+.modal-mask { position: fixed; inset: 0; background: rgba(16, 24, 40, 0.45); display: flex; align-items: flex-start; justify-content: center; padding: 48px 16px; z-index: 50; overflow: auto; }
+.modal { background: #fff; border-radius: 10px; width: min(760px, 100%); padding: 18px 20px; box-shadow: 0 12px 40px rgba(16, 24, 40, 0.25); }
+.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.modal-head h3 { margin: 0; font-size: 16px; }
+.modal-foot { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+.modal-foot-spacer { flex: 1; }
+.scope-block { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-top: 12px; }
+.scope-title { margin-bottom: 8px; font-size: 14px; display: flex; gap: 6px; align-items: baseline; }
+.cluster-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 8px; border-radius: 6px; background: #f8fafc; margin-bottom: 6px; }
+.cluster-head { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.date-field { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.date-field input { padding: 4px 8px; }
+.cluster-members { display: flex; gap: 6px; flex-wrap: wrap; width: 100%; }
+.member-chip { background: #e0efff; color: #1849a9; border-radius: 999px; padding: 1px 10px; font-size: 12px; }
+.solo-block { margin-top: 8px; border-top: 1px dashed var(--border); padding-top: 8px; }
+.solo-title { font-size: 12px; color: #b42318; margin-bottom: 6px; }
+.solo-row { background: #fef3f2; }
+
+.sheet-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; }
+.sheet-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.sheet-no { font-size: 15px; margin-right: 8px; }
+.scope-chip { background: #eef2f7; border-radius: 4px; padding: 1px 8px; font-size: 12px; margin-right: 6px; }
+.sheet-actions { display: flex; gap: 8px; align-items: center; }
+.sheet-actions .btn[disabled] { opacity: .55; cursor: not-allowed; }
+.duration-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; background: #f8fafc; border-radius: 6px; padding: 8px 10px; margin-bottom: 10px; }
+.duration-label { color: var(--muted); }
+.duration-form { margin-left: auto; display: flex; gap: 6px; }
+.duration-form input { padding: 4px 8px; width: 150px; }
+.inner-table th, .inner-table td { padding: 6px 8px; }
